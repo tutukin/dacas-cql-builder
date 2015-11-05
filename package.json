@@ -1,0 +1,34 @@
+{
+  "name": "dacas-cql-builder",
+  "version": "0.0.1",
+  "description": "CQL builder for dacas (object-column family mapper)",
+  "main": "src/CQL.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tutukin/dacas-cql-builder.git"
+  },
+  "keywords": [
+    "cassandra",
+    "cql",
+    "dacas"
+  ],
+  "author": "Andrei V. Toutoukine",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tutukin/dacas-cql-builder/issues"
+  },
+  "homepage": "https://github.com/tutukin/dacas-cql-builder#readme",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.11.3",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-mocha-test": "^0.12.7",
+    "grunt-todo": "^0.5.0",
+    "gruntfile-gtx": "^0.3.0",
+    "mocha": "^2.3.3",
+    "require-directory": "^2.1.1"
+  }
+}
