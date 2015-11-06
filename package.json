@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/tutukin/dacas-cql-builder#readme",
   "devDependencies": {
+    "chai": "^3.4.0",
     "grunt": "^0.4.5",
     "grunt-contrib-jshint": "^0.11.3",
     "grunt-contrib-watch": "^0.6.1",
