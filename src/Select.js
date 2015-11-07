@@ -2,30 +2,16 @@
 
 const E = require('./Error');
 
+const table = require('./clauses/table');
+
 module.exports = class Select {
     constructor (list) {
         this.list = list || ['*'];
     }
 
     from (keyspaceName, tableName) {
-        if (! keyspaceName && ! tableName ) throw E('ArgumentRequired', 'At least table name must be provided');
-        if ( keyspaceName && ! tableName ) {
-            tableName = keyspaceName;
-            keyspaceName = null;
-        }
-
-        this.keyspaceName = keyspaceName;
-        this.tableName = tableName;
-
+        this._table = table(keyspaceName, tableName);
         return this;
-    }
-
-    fullTableName () {
-        return this.keyspaceName ?
-                [this.keyspaceName, this.tableName].join('.') :
-            this.tableName ?
-                this.tableName :
-                undefined;
     }
 
     where (relations) {
@@ -88,11 +74,10 @@ module.exports = class Select {
     }
 
     toString () {
-        let from = this.fullTableName();
-        if ( ! from ) throw E('ClauseRequired', '"FROM" clause required: use .from() method!');
+        if ( ! this._table ) throw E('ClauseRequired', '"FROM" clause required: use .from() method!');
         let q = [
             'SELECT', this.list.join(', '),
-            'FROM', from
+            'FROM', this._table.name()
         ];
 
         if ( this.relations ) {
