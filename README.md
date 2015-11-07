@@ -12,6 +12,10 @@ var q = CQL
 
 console.log(q.toString());
 // -> 'SELECT * FROM keyspace.table'
+
+q = CQL.insert({a:'aaa', b:'bbb'}).into('ks', 'tbl');
+console.log(q.toString());
+// -> "INSERT INTO ks.tbl (a, b) VALUES ('aaa', 'bbb')"
 ```
 ## API
 
