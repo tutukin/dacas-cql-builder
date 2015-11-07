@@ -7,11 +7,12 @@ const CQL = require('../src/CQL');
 
 describe('CQL', () => {
     describe('Select', () => {
-        describe('.constructor(list)', () => {
-            beforeEach( () => {
-                this.select = (list) => CQL.select(list).from('ks','tb');
-            });
+        beforeEach( () => {
+            this.select = (list) => CQL.select(list).from('kn', 'tb');
+        });
 
+
+        describe('.constructor(list)', () => {
             it('should not require a list', () => {
                 let q;
                 expect(() => {
@@ -72,10 +73,6 @@ describe('CQL', () => {
 
 
         describe('#where(relations)', () => {
-            beforeEach( () => {
-                this.select = (list) => CQL.select(list).from('kn', 'tb');
-            });
-
             it('should be an instance method', () => {
                 let q = this.select();
                 expect(q).itself.to.respondTo('where');
@@ -88,6 +85,66 @@ describe('CQL', () => {
                 });
 
                 expect(q.toString()).to.include('WHERE identity = \'established\' AND mistake = 0');
+            });
+        });
+
+
+
+        describe('#order(list)', () => {
+            it('should be a function', () => {
+                expect(CQL.select()).itself.to.respondTo('order');
+            });
+
+            it('should understand a list of type {col1:"asc", col2:"desc"}', () => {
+                let q = this.select().order({
+                    col1:'asc',
+                    col2:'desc'
+                });
+
+                expect(q.toString()).to.include('ORDER BY col1 ASC, col2 DESC');
+            });
+
+            it('should understand integers as ordering', () => {
+                let q = this.select().order({
+                    col1:  1,
+                    col2: -1
+                });
+
+                expect(q.toString()).to.include('ORDER BY col1 ASC, col2 DESC');
+            });
+
+            it('should throw Error.UnknownOrdering if incorrect ordering is requested', () => {
+                expect(() => {
+                    this.select().order({col1:'sc'});
+                }).to.throw(Error)
+                .that.has.property('type')
+                .that.equals('UnknownOrdering');
+            });
+        });
+
+
+
+        describe('#limit(n)', () => {
+            it('should be a function', () => {
+                expect(CQL.select()).itself.to.respondTo('limit');
+            });
+
+            it('should add limit clause to the query', () => {
+                let q = this.select().limit(12);
+                expect(q.toString()).to.include('LIMIT 12');
+            });
+
+            it('should accept a digits-only string', () => {
+                let q = this.select().limit('13');
+                expect(q.toString()).to.include('LIMIT 13');
+            });
+
+            it('should throw Error:NaNLimit if not a clean number is passed', () => {
+                expect(() => {
+                    this.select().limit('13k');
+                }).to.throw(Error)
+                .that.has.property('type')
+                .that.equals('NaNLimit');
             });
         });
 
