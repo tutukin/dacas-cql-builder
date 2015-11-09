@@ -17,4 +17,10 @@ describe('CQL', () => {
             expect(this.CQL).itself.to.respondTo('insert');
         });
     });
+
+    describe('.update(keyspaceName, tableName)', () => {
+        it('should be a function', () => {
+            expect(this.CQL).itself.to.respondTo('update');
+        });
+    });
 });

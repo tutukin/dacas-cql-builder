@@ -2,10 +2,12 @@
 
 const Select = require('./Select');
 const Insert = require('./Insert');
+const Update = require('./Update');
 
 module.exports = {
     select: select,
-    insert: insert
+    insert: insert,
+    update: update
 };
 
 function select (list) {
@@ -14,4 +16,8 @@ function select (list) {
 
 function insert (keyspaceName, tableName, list) {
     return new Insert(keyspaceName, tableName, list);
+}
+
+function update (keyspaceName, tableName) {
+    return new Update(keyspaceName, tableName);
 }

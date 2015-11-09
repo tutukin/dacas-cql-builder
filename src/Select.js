@@ -3,6 +3,7 @@
 const E = require('./Error');
 
 const table = require('./clauses/table');
+const kvlist = require('./clauses/kvlist');
 
 module.exports = class Select {
     constructor (list) {
@@ -15,10 +16,7 @@ module.exports = class Select {
     }
 
     where (relations) {
-        this.relations = Object.keys(relations).map( (key) => {
-            let value = relations[key];
-            return {key: key, value: value};
-        });
+        this._relations = kvlist(relations);
 
         return this;
     }
@@ -65,7 +63,7 @@ module.exports = class Select {
     }
 
     getValues () {
-        return this.relations.map(_=>_.value);
+        return this._relations.values();
     }
 
     toString () {
@@ -75,9 +73,9 @@ module.exports = class Select {
             'FROM', this._table.name()
         ];
 
-        if ( this.relations ) {
+        if ( this._relations ) {
             q.push('WHERE');
-            q.push(this.relations.map(_=>`${_.key} = ?`).join(' AND '));
+            q.push(this._relations.keys( key =>`${key} = ?`).join(' AND '));
         }
 
         if ( this.orderList ) {
