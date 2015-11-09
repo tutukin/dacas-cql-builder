@@ -23,4 +23,10 @@ describe('CQL', () => {
             expect(this.CQL).itself.to.respondTo('update');
         });
     });
+
+    describe('.delete(list)', () => {
+        it('should be a function', () => {
+            expect(this.CQL).itself.to.respondTo('delete');
+        });
+    });
 });
