@@ -31,7 +31,7 @@ describe('CQL', () => {
                 let values = names.map( name => obj[name] );
 
                 expect(cql).to.include(`INSERT INTO ks.tn (${names.join(', ')})`);
-                expect(cql).to.include(`VALUES (${values.join(', ')})`);
+                expect(cql).to.include('VALUES (?, ?)');
             });
         });
 
@@ -80,7 +80,21 @@ describe('CQL', () => {
                 let values = names.map( (v, i) => i);
                 let q = this.insert(names).values(values);
 
-                expect(q.toString()).to.include(`VALUES (${values.join(', ')})`);
+                expect(q.toString()).to.include('VALUES (?, ?)');
+            });
+        });
+
+
+        describe('getValues()', () => {
+            beforeEach( () => {
+                this.insert = (obj) => CQL.insert(obj).into('ks', 'tn');
+            });
+
+            it('should return the list of values to insert', () => {
+                let obj = {a:'aaa', b:'bbb'};
+                let q = this.insert(obj);
+
+                expect(q.getValues()).to.deep.equal(['aaa', 'bbb']);
             });
         });
     });

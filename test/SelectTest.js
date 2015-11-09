@@ -84,7 +84,7 @@ describe('CQL', () => {
                     mistake: 0
                 });
 
-                expect(q.toString()).to.include('WHERE identity = \'established\' AND mistake = 0');
+                expect(q.toString()).to.include('WHERE identity = ? AND mistake = ?');
             });
         });
 
@@ -145,6 +145,20 @@ describe('CQL', () => {
                 }).to.throw(Error)
                 .that.has.property('type')
                 .that.equals('NaNLimit');
+            });
+        });
+
+
+
+        describe('#getValues()', () => {
+            it('should be an instance method', () => {
+                expect(this.select()).itself.to.respondTo('getValues');
+            });
+
+            it('should return values from relations', () => {
+                let q = this.select().where({a:'aaa', b:1});
+
+                expect(q.getValues()).to.deep.equal(['aaa',1]);
             });
         });
 

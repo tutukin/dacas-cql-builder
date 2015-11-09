@@ -15,21 +15,12 @@ module.exports = class Select {
     }
 
     where (relations) {
-        this.relations = relations;
-        return this;
-    }
-
-    parseRelations () {
-        return Object.keys(this.relations).map( (key) => {
-            let value = _literal(this.relations[key]);
-            return `${key} = ${value}`;
+        this.relations = Object.keys(relations).map( (key) => {
+            let value = relations[key];
+            return {key: key, value: value};
         });
 
-        function _literal (v) {
-            return typeof v === 'string' ?
-                `'${v}'` :
-                v;
-        }
+        return this;
     }
 
     order (list) {
@@ -73,6 +64,10 @@ module.exports = class Select {
         }
     }
 
+    getValues () {
+        return this.relations.map(_=>_.value);
+    }
+
     toString () {
         if ( ! this._table ) throw E('ClauseRequired', '"FROM" clause required: use .from() method!');
         let q = [
@@ -82,7 +77,7 @@ module.exports = class Select {
 
         if ( this.relations ) {
             q.push('WHERE');
-            q.push(this.parseRelations().join(' AND '));
+            q.push(this.relations.map(_=>`${_.key} = ?`).join(' AND '));
         }
 
         if ( this.orderList ) {

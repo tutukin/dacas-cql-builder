@@ -29,7 +29,6 @@ module.exports = class Insert {
             let obj = args.pop();
             this._colnames = Object.keys(obj);
             this.values( this._colnames.map( name => obj[name] ));
-            console.dir(this);
         }
 
         if ( args.length ) this.into(args);
@@ -52,12 +51,16 @@ module.exports = class Insert {
         return this;
     }
 
+    getValues () {
+        return this._values.slice();
+    }
+
 
     toString () {
         let cql = [
             'INSERT INTO', this._table.name(),
             `(${this._colnames.join(', ')})`,
-            'VALUES', `(${this._values.join(', ')})`
+            'VALUES', `(${this._values.map(_=>'?').join(', ')})`
         ];
 
         return cql.join(' ');
