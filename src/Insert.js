@@ -3,18 +3,17 @@
 const E = require('./Error');
 const table = require('./clauses/table');
 
-/*
-    # Plain syntax
-    let colnames = ['a', 'b', 'c'];
-    let values = [1,2,3];
-    CQL.insert(ks, tn, colnames).values(values);
-    CQL.insert(colnames).into(ks, tn).values(values);
+/**
+    Class representing INSERT query
 
-    # clever
-    let obj = colnames.reduce( (o, key, i) => { o[key] = values[i]; return o; }, {});
-    CQL.insert(obj).into(ks, tn);
+    Example:
+
+    ```javascript
+        let row = { a: 'aaa', b: 'bbb' };
+        let q = Insert(row).into([keyspaceName, tableName]);
+        driver.exec(q.toString(), q.getValues()).then(processResults, processError);
+    ```
 */
-
 module.exports = class Insert {
     constructor () {
         let args = Array.prototype.slice.apply(arguments);

@@ -6,6 +6,23 @@ const table = require('./clauses/table');
 
 const kvlist = require('./clauses/kvlist');
 
+/**
+    Class representing UPDATE query
+
+    Example:
+
+    ``` javascript
+        let assignments = {
+            a: 'Aaa',
+            b: 'Bbb'
+        };
+        let rowSpec = {
+            pk: 1234567
+        }
+        let q = CQL.update(keyspace, table).set(assignments).where(rowSpec);
+        driver.exec(q.toString(), q.getValues()).then(processResults, processError);
+    ```
+*/
 module.exports = class Update {
     constructor (keyspaceName, tableName) {
         this._table = table(keyspaceName, tableName);
